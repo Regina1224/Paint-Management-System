@@ -14,7 +14,7 @@ public class Order
     {
         Product = paintProduct;
         Quantity = quantity;
-        TotalPrice = 0m;
+        TotalPrice = GetTotalPrice();
         CreatedAt = DateTime.Now;
     }
 
