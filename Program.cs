@@ -1,6 +1,7 @@
 ﻿
 using PaintManagementSystem.Models;
 using PaintManagementSystem.Orders;
+using System.Collections.Generic;
 
 PaintProduct[] products = new PaintProduct[3];
 
@@ -35,8 +36,33 @@ foreach (PaintProduct product in products)
 }
 
 // create an order
-Order order = new Order(products[0], 3);
+List<PaintProduct> orderProducts = new List<PaintProduct>{ products[0], products[1], products[2] };
+Order order = new Order(orderProducts, 1);
+
 // display order details
 Console.WriteLine("===== Order details =====");
 order.DisplayOrder();
+
+// test new methods
+Console.WriteLine("===== Most expensive product =====");
+PaintProduct mostExpensive = order.GetMostExpensivePaintProduct();
+mostExpensive.DisplayInfo();
+
+Console.WriteLine("===== Products priced between 60 and 130 =====");
+List<PaintProduct> rangeProduct = order.GetProductsInPriceRange(60m, 130m);
+foreach (PaintProduct p in rangeProduct)
+{
+    p.DisplayInfo();
+    Console.WriteLine("------------------------");
+}
+
+
+Console.WriteLine("===== Total price by paint type =====");
+Dictionary<PaintType, decimal> groupProduct = order.GetTotalPriceByType();
+foreach(var entry in groupProduct)
+{
+    Console.WriteLine($"{entry.Key}: {entry.Value:C}");
+}
+
+
 

@@ -4,31 +4,73 @@ namespace PaintManagementSystem.Orders;
 
 public class Order
 {
+    // filed
     public readonly DateTime CreatedAt;
 
-    public PaintProduct Product { get; set; }
+    // props
+    public List<PaintProduct> Products { get; set; }
     public int Quantity { get; set; }
     public decimal TotalPrice { get; set; }
 
-    public Order(PaintProduct paintProduct, int quantity)
+    // constructor: a group of products
+    public Order(List<PaintProduct> products, int quantity)
     {
-        Product = paintProduct;
+        Products = products;
         Quantity = quantity;
-        TotalPrice = GetTotalPrice();
         CreatedAt = DateTime.Now;
+        TotalPrice = GetTotalOrderPrice();
     }
 
+    // methods
     public void DisplayOrder()
     {
         Console.WriteLine($"Order created time: {CreatedAt}");
-        Product.DisplayInfo();
+        foreach (PaintProduct product in Products)
+        {
+            product.DisplayInfo();
+            Console.WriteLine("------------------------");
+        }
         Console.WriteLine($"Quantity: {Quantity}");
         Console.WriteLine($"Order total price: {TotalPrice:C}");
     }
 
-    public decimal GetTotalPrice()
+    public decimal GetTotalOrderPrice()
     {
-        return Product.GetFinalPrice() * Quantity;
+        return Products.Sum(p=>p.GetFinalPrice()) * Quantity;
     }
+
+    // find most expensive product
+    public PaintProduct GetMostExpensivePaintProduct()
+    {
+        return Products.OrderByDescending(p=>p.GetFinalPrice()).First();
+    }
+
+    // remove product
+    public void RemoveProduct(int productId)
+    {
+        if(productId >=0 && productId< Products.Count)
+        {
+            Products.RemoveAt(productId);
+        }
+        Console.WriteLine("Invaliad product id");
+    }
+
+    public List<PaintProduct> GetProductsInPriceRange(decimal minPrice, decimal maxPrice)
+    {
+        return Products.Where(p=>p.Price > minPrice && p.Price < maxPrice).ToList();
+    }
+
+    public Dictionary<PaintType, decimal> GetTotalPriceByType()
+    {
+        return Products.GroupBy(p=>p.Type).ToDictionary(
+            // key
+            g=>g.Key,
+            // value
+            g=>g.Sum(p=>p.GetFinalPrice())
+        );
+    }
+
+
+
 
 }
