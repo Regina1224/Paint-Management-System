@@ -51,7 +51,9 @@ public class Order
         if(productId >=0 && productId< Products.Count)
         {
             Products.RemoveAt(productId);
+            TotalPrice = GetTotalOrderPrice();
         }
+
         Console.WriteLine("Invaliad product id");
     }
 

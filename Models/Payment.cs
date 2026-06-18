@@ -15,7 +15,7 @@ public class Payment
     public readonly DateTime CreatedAt;
   
     // constructor
-    public Payment(Order order, int paymentId, PaymentStatus status, decimal paymentAmount, PaymentMethod method)
+    public Payment(int paymentId, Order order, PaymentStatus status, decimal paymentAmount, PaymentMethod method)
     {
         Order = order;
         PaymentId = paymentId;
